@@ -28,11 +28,7 @@ public class connector {
 		return DBConnection;
 	}
 	
-	
-	@SuppressWarnings("resource")
-	public void check() {
-		GUI get = new GUI();
-		String code = get.pin;
+	public void check(String tme, String stmt, String cde) {
 		String sql =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
 		ResultSet rs = null;
@@ -40,25 +36,23 @@ public class connector {
 		try {
 			connect = connect();
 			ps = connect.prepareStatement(sql);
-			ps.setString(1, get.pin);
+			ps.setString(1, cde);
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				get.status = "OK";
+				stmt = "OK";
 				System.out.println("Success!");
 				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`)VALUES(?,?,?)";
 				ps = connect.prepareStatement(sql2);
-				ps.setString(1, get.time);
-				ps.setString(2, get.status);
-				ps.setString(3, code);
+				ps.setString(1, tme);
+				ps.setString(2, stmt);
+				ps.setString(3, cde);
 				ps.executeUpdate();
 			}else {
-				get.status = "Fail";
+				stmt = "Fail";
 				System.out.println("Fail!");
-				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`)VALUES(?,?,?)";
-				ps = connect.prepareStatement(sql2);
-				ps.setString(1, get.time);
-				ps.setString(2, get.status);
-				ps.setString(3, code);
+				ps.setString(1, tme);
+				ps.setString(2, stmt);
+				ps.setString(3, cde);
 				ps.executeUpdate();
 			}
 		}catch(Exception ex) {

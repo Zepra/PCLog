@@ -14,11 +14,13 @@ public class GUI extends JFrame {
 	public JButton Ok_btn;
 	public JButton Cancel_btn;
 	
+	
+	
 	private connector connection;
 	
-	String status = null;
-	String time = null;
-	String pin = null;
+	public String status = "";
+	public String time =  "";
+	public String pin = "";
 	
 	public GUI() {
 		connection = new connector();
@@ -59,9 +61,9 @@ public class GUI extends JFrame {
 			char[] kennung = password_fld.getPassword();
 			pin = new String(kennung);
 			System.out.println("Pin: " + pin);
-			connection.check();
+			connection.check(time,status,pin);
 		});
-		//
+		
 		
 		Cancel_btn.addActionListener(e -> {
 			try {
@@ -70,7 +72,7 @@ public class GUI extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		//
+		
 		
 	}
 	
