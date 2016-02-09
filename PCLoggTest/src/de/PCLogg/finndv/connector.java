@@ -1,5 +1,7 @@
 package de.PCLogg.finndv;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +10,6 @@ import java.sql.SQLException;
 
 public class connector {
 	private Connection DBConnection = null;
-	
 	public Connection connect() {
 		System.out.println("Connect");
 		try {
@@ -28,7 +29,17 @@ public class connector {
 		return DBConnection;
 	}
 	
-	public void check(String tme, String stmt, String cde) {
+	
+	public String getHost(String hst) {
+		try {
+			hst = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hst;
+	}
+	public void check(String tme, String stmt, String cde, String hst) {
 		String sql =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
 		ResultSet rs = null;
@@ -40,12 +51,15 @@ public class connector {
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				stmt = "OK";
-				System.out.println("Success!");
-				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`)VALUES(?,?,?)";
+				hst = getHost("");
+				System.out.println("Success! ");
+				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`,`Host`)VALUES(?,?,?,?)";
+				System.out.println(System.getProperties());
 				ps = connect.prepareStatement(sql2);
 				ps.setString(1, tme);
 				ps.setString(2, stmt);
 				ps.setString(3, cde);
+				ps.setString(4, hst);
 				ps.executeUpdate();
 			}else {
 				stmt = "Fail";
@@ -53,6 +67,7 @@ public class connector {
 				ps.setString(1, tme);
 				ps.setString(2, stmt);
 				ps.setString(3, cde);
+				ps.setString(4, hst);
 				ps.executeUpdate();
 			}
 		}catch(Exception ex) {

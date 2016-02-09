@@ -21,6 +21,7 @@ public class GUI extends JFrame {
 	public String status = "";
 	public String time =  "";
 	public String pin = "";
+	public String hostname = "";
 	
 	public GUI() {
 		connection = new connector();
@@ -32,6 +33,8 @@ public class GUI extends JFrame {
 		//Größe und Titel vom Frame wird festgelegt;
 		this.setTitle("PCLogg by Finn v1.2");
 		this.setSize(400,250);
+		this.setLocationRelativeTo(null);
+		//this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		//Erstelle Komponenten;
 		JPasswordField password_fld = new JPasswordField();
@@ -61,7 +64,7 @@ public class GUI extends JFrame {
 			char[] kennung = password_fld.getPassword();
 			pin = new String(kennung);
 			System.out.println("Pin: " + pin);
-			connection.check(time,status,pin);
+			connection.check(time,status,pin,hostname);
 		});
 		
 		
