@@ -1,7 +1,5 @@
 package de.PCLogg.finndv;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +8,8 @@ import java.sql.SQLException;
 
 public class connector {
 	private Connection DBConnection = null;
+	SystemInformation sysinfo = new SystemInformation();
+	
 	public Connection connect() {
 		System.out.println("Connect");
 		try {
@@ -29,50 +29,36 @@ public class connector {
 		return DBConnection;
 	}
 	
-	
-	public String getHost(String hst) {
-		try {
-			hst = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		return hst;
-	}
-	@SuppressWarnings("resource")
-	public void check(String tme, String stmt, String cde, String hst) {
+
+	public void check(String tme,String stmt, String cde, String hst, String ip) {
 		String sql =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
 		ResultSet rs = null;
 		Connection connect = null;
 		try {
+			String sql2 = "INSERT INTO `Logs` (`Zeit`,`Status`,`Code`,`Host`,`IP`)VALUES(?,?,?,?,?)";
 			connect = connect();
 			ps = connect.prepareStatement(sql);
 			ps.setString(1, cde);
 			rs = ps.executeQuery();
 			if(rs.next()) {
+				System.out.println("Success!");
 				stmt = "OK";
-				hst = getHost("");
-				System.out.println("Success! ");
-				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`,`Host`)VALUES(?,?,?,?)";
-				System.out.println(System.getProperties());
-				ps = connect.prepareStatement(sql2);
-				ps.setString(1, tme);
+				ps.setString(1, sysinfo.getTime(tme));
 				ps.setString(2, stmt);
-				ps.setString(3, cde);
-				ps.setString(4, hst);
-				ps.executeUpdate();
-				System.out.println("Test");
+				ps.setString(3, sysinfo.getCode(cde));
+				ps.setString(4, sysinfo.getHost(hst));
+				ps.setString(5, sysinfo.getIP(ip));
+				ps.executeUpdate(sql2);
 			}else {
-				stmt = "Fail";
-				hst = getHost("");
 				System.out.println("Fail!");
-				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`,`Host`)VALUES(?,?,?,?)";
-				ps = connect.prepareStatement(sql2);
-				ps.setString(1, tme);
+				stmt = "Fail";
+				ps.setString(1, sysinfo.getTime(tme));
 				ps.setString(2, stmt);
-				ps.setString(3, cde);
-				ps.setString(4, hst);
-				ps.executeUpdate();
+				ps.setString(3, sysinfo.getCode(cde));
+				ps.setString(4, sysinfo.getHost(hst));
+				ps.setString(5, sysinfo.getIP(ip));
+				ps.executeUpdate(sql2);
 			}
 		}catch(Exception ex) {
 			System.out.println("Error");

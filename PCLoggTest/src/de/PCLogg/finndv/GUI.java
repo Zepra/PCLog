@@ -1,8 +1,5 @@
 package de.PCLogg.finndv;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,23 +8,22 @@ import javax.swing.JPasswordField;
 
 public class GUI extends JFrame {
 	private static final long serialVersionUID = -7071104934829402334L;
+	SystemInformation sysinfo = new SystemInformation();
+	
 	public JButton Ok_btn;
 	public JButton Cancel_btn;
-	
 	private connector connection;
 	
-	public String status = "";
 	public String time =  "";
-	public String pin = "";
+	private String pin = "";
 	public String hostname = "";
+	public String ipaddress = "";
+	public String status = "";
 	
 	public GUI() {
+		
 		connection = new connector();
-		
-		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy.MM.dd 'at' HH:mm:ss ");
-		Date currentTime = new Date();
-		time = formatter.format(currentTime);
-		
+
 		//Größe und Titel vom Frame wird festgelegt;
 		this.setTitle("PCLogg by Finn v1.2");
 		this.setSize(400,250);
@@ -35,7 +31,7 @@ public class GUI extends JFrame {
 		//this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		//Erstelle Komponenten;
-		JPasswordField password_fld = new JPasswordField();
+		JPasswordField password_fld = new JPasswordField("Passwort");
 		JPanel content = new JPanel();
 		JLabel message = new JLabel("Password:");
 		JButton Ok_btn = new JButton("Ok!");
@@ -60,9 +56,10 @@ public class GUI extends JFrame {
 		//ActionListener	
 		Ok_btn.addActionListener(e -> {
 			char[] kennung = password_fld.getPassword();
-			pin = new String(kennung);
+			pin = (new String(kennung));
 			System.out.println("Pin: " + pin);
-			connection.check(time,status,pin,hostname);
+			connection.check(time,status,pin,hostname,ipaddress);
+			sysinfo.getCode(pin);
 			this.setVisible(false);
 		});
 		
@@ -81,6 +78,9 @@ public class GUI extends JFrame {
 	public static void main(String[]args) {
 		GUI gui = new GUI();
 		gui.setVisible(true);
+		
 	}
+
+
 	
 }
