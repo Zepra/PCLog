@@ -34,11 +34,11 @@ public class connector {
 		try {
 			hst = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return hst;
 	}
+	@SuppressWarnings("resource")
 	public void check(String tme, String stmt, String cde, String hst) {
 		String sql =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
@@ -61,9 +61,13 @@ public class connector {
 				ps.setString(3, cde);
 				ps.setString(4, hst);
 				ps.executeUpdate();
+				System.out.println("Test");
 			}else {
 				stmt = "Fail";
+				hst = getHost("");
 				System.out.println("Fail!");
+				String sql2 = "INSERT INTO `Loggs` (`Zeit`,`Status`,`Code`,`Host`)VALUES(?,?,?,?)";
+				ps = connect.prepareStatement(sql2);
 				ps.setString(1, tme);
 				ps.setString(2, stmt);
 				ps.setString(3, cde);

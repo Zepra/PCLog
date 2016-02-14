@@ -14,8 +14,6 @@ public class GUI extends JFrame {
 	public JButton Ok_btn;
 	public JButton Cancel_btn;
 	
-	
-	
 	private connector connection;
 	
 	public String status = "";
@@ -59,12 +57,13 @@ public class GUI extends JFrame {
 		Ok_btn.setBounds(100, 180, 68, 20);
 		Cancel_btn.setBounds(200, 180, 68, 20);
 		
-		//ActionListener			
+		//ActionListener	
 		Ok_btn.addActionListener(e -> {
 			char[] kennung = password_fld.getPassword();
 			pin = new String(kennung);
 			System.out.println("Pin: " + pin);
 			connection.check(time,status,pin,hostname);
+			this.setVisible(false);
 		});
 		
 		
