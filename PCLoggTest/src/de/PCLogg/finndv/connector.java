@@ -36,28 +36,19 @@ public class connector {
 		try {
 			connect = connect();
 			ps = connect.prepareStatement(selectPassQuery);
-			ps.setString(1, sysinfo.getCode(passwd));
+			ps.setString(1, passwd);
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				update("OK", passwd);
+				connect.close();
 			}else {
 				update("FAIL", passwd);
+				connect.close();
 			}
 		}catch(Exception ex) {
 			System.out.println("Error");
 			ex.printStackTrace();
-		}finally{
-			if(connect != null) {
-				try {
-					if(rs != null) {
-						rs.close();
-					}
-					connect.setAutoCommit(true);
-					connect.close();
-				}catch(SQLException sx) {
-					sx.printStackTrace();
-				}
-			}
+		
 		}
 	}
 	
@@ -71,7 +62,7 @@ public class connector {
 			System.out.println("Fail!");
 			ps.setString(1, sysinfo.getTime());
 			ps.setString(2, status);
-			ps.setString(3, sysinfo.getCode(passwd));
+			ps.setString(3, passwd);
 			ps.setString(4, sysinfo.getHost());
 			ps.setString(5, sysinfo.getIP());
 			ps.executeUpdate();

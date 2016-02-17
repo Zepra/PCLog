@@ -54,7 +54,6 @@ public class GUI extends JFrame {
 		okBtn.addActionListener(e -> {
 			char[] kennung = passwordFld.getPassword();
 			pin = (new String(kennung));
-			sysinfo.getCode(pin);
 			connection.check(pin);
 			this.setVisible(false);
 			dbGUI.setVisible(true);

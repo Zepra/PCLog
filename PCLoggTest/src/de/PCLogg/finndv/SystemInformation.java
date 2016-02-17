@@ -10,7 +10,7 @@ public class SystemInformation {
 	public String getHost() {
 		try {
 			return InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
+		}catch(UnknownHostException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -32,7 +32,4 @@ public class SystemInformation {
 		return tme;
 	}
 	
-	public String getCode(String passwd) {
-		return passwd;
-	}
 }
