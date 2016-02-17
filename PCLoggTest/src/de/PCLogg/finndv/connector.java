@@ -29,19 +29,20 @@ public class connector {
 		return DBConnection;
 	}
 	
-
+	@SuppressWarnings("resource")
 	public void check(String tme,String stmt, String cde, String hst, String ip) {
-		String sql =  "SELECT * FROM Data WHERE Passcode=?";
+		String selectPassQuery =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
 		ResultSet rs = null;
 		Connection connect = null;
 		try {
-			String sql2 = "INSERT INTO `Logs` (`Zeit`,`Status`,`Code`,`Host`,`IP`)VALUES(?,?,?,?,?)";
+			String addNewLogQuery = "INSERT INTO `Logs` (`Zeit`,`Status`,`Code`,`Host`,`IP`)VALUES(?,?,?,?,?)";
 			connect = connect();
-			ps = connect.prepareStatement(sql);
-			ps.setString(1, cde);
+			ps = connect.prepareStatement(selectPassQuery);
+			ps.setString(1, sysinfo.getCode(cde));
 			rs = ps.executeQuery();
 			if(rs.next()) {
+				ps = connect.prepareStatement(addNewLogQuery);
 				System.out.println("Success!");
 				stmt = "OK";
 				ps.setString(1, sysinfo.getTime(tme));
@@ -49,8 +50,9 @@ public class connector {
 				ps.setString(3, sysinfo.getCode(cde));
 				ps.setString(4, sysinfo.getHost(hst));
 				ps.setString(5, sysinfo.getIP(ip));
-				ps.executeUpdate(sql2);
+				ps.executeUpdate();
 			}else {
+				ps = connect.prepareStatement(addNewLogQuery);
 				System.out.println("Fail!");
 				stmt = "Fail";
 				ps.setString(1, sysinfo.getTime(tme));
@@ -58,7 +60,7 @@ public class connector {
 				ps.setString(3, sysinfo.getCode(cde));
 				ps.setString(4, sysinfo.getHost(hst));
 				ps.setString(5, sysinfo.getIP(ip));
-				ps.executeUpdate(sql2);
+				ps.executeUpdate();
 			}
 		}catch(Exception ex) {
 			System.out.println("Error");

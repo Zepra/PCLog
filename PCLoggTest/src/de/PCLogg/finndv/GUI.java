@@ -58,8 +58,8 @@ public class GUI extends JFrame {
 			char[] kennung = password_fld.getPassword();
 			pin = (new String(kennung));
 			System.out.println("Pin: " + pin);
-			connection.check(time,status,pin,hostname,ipaddress);
 			sysinfo.getCode(pin);
+			connection.check(time,status,pin,hostname,ipaddress);
 			this.setVisible(false);
 		});
 		
@@ -72,7 +72,6 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		
 	}
 	
 	public static void main(String[]args) {
@@ -81,6 +80,4 @@ public class GUI extends JFrame {
 		
 	}
 
-
-	
 }

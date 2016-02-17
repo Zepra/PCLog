@@ -16,16 +16,14 @@ public class SystemInformation {
 		return hst;
 	}
 	
-	
 	public String getIP(String ip) {
-			try {
-				ip = InetAddress.getLocalHost().getHostAddress();
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
+		try {
+			ip = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		return ip;
 	}
-	
 	
 	public String getTime(String tme) {
 		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy.MM.dd 'at' HH:mm:ss ");
