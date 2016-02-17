@@ -7,32 +7,32 @@ import java.util.Date;
 
 public class SystemInformation {
 
-	public String getHost(String hst) {
+	public String getHost() {
 		try {
-			hst = InetAddress.getLocalHost().getHostName();
+			return InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		return hst;
+		return null;
 	}
 	
-	public String getIP(String ip) {
+	public String getIP() {
 		try {
-			ip = InetAddress.getLocalHost().getHostAddress();
+			return InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		return ip;
+		return null;
 	}
 	
-	public String getTime(String tme) {
-		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy.MM.dd 'at' HH:mm:ss ");
+	public String getTime() {
+		SimpleDateFormat formatter = new SimpleDateFormat ("dd.MM.YYYY 'at' HH:mm:ss ");
 		Date currentTime = new Date();
-		tme = formatter.format(currentTime);
+		String tme = formatter.format(currentTime);
 		return tme;
 	}
 	
-	public String getCode(String cde) {
-		return cde;
+	public String getCode(String passwd) {
+		return passwd;
 	}
 }

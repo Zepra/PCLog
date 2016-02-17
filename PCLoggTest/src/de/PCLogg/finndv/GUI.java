@@ -14,57 +14,55 @@ public class GUI extends JFrame {
 	public JButton Cancel_btn;
 	private connector connection;
 	
-	public String time =  "";
 	private String pin = "";
-	public String hostname = "";
-	public String ipaddress = "";
-	public String status = "";
 	
 	public GUI() {
 		
+		DatabaseGUI dbGUI = new DatabaseGUI();
 		connection = new connector();
 
 		//Größe und Titel vom Frame wird festgelegt;
-		this.setTitle("PCLogg by Finn v1.2");
+		this.setTitle("PCLog by Finn v1.2");
 		this.setSize(400,250);
 		this.setLocationRelativeTo(null);
 		//this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		//Erstelle Komponenten;
-		JPasswordField password_fld = new JPasswordField("Passwort");
+		JPasswordField passwordFld = new JPasswordField("Passwort");
 		JPanel content = new JPanel();
 		JLabel message = new JLabel("Password:");
-		JButton Ok_btn = new JButton("Ok!");
-		JButton Cancel_btn = new JButton("Cancel!");
+		JButton okBtn = new JButton("Ok!");
+		JButton cancelBtn = new JButton("Cancel!");
 		
 		//Lege Layout fest;
 		getContentPane().add(content);
 		content.setLayout(null);
 		
 		//Füge Komponenten hinzu;
-		content.add(password_fld);
+		content.add(passwordFld);
 		content.add(message);
-		content.add(Ok_btn);
-		content.add(Cancel_btn);
+		content.add(okBtn);
+		content.add(cancelBtn);
 
 		//Position und Größe der Komponenten wird gesetzt;
-		password_fld.setBounds(101, 96, 167, 20);
+		passwordFld.setBounds(101, 96, 167, 20);
 		message.setBounds(101, 45, 167, 43);
-		Ok_btn.setBounds(100, 180, 68, 20);
-		Cancel_btn.setBounds(200, 180, 68, 20);
+		okBtn.setBounds(100, 180, 68, 20);
+		cancelBtn.setBounds(200, 180, 68, 20);
 		
 		//ActionListener	
-		Ok_btn.addActionListener(e -> {
-			char[] kennung = password_fld.getPassword();
+		okBtn.addActionListener(e -> {
+			char[] kennung = passwordFld.getPassword();
 			pin = (new String(kennung));
 			System.out.println("Pin: " + pin);
 			sysinfo.getCode(pin);
-			connection.check(time,status,pin,hostname,ipaddress);
+			connection.check(pin);
 			this.setVisible(false);
+			dbGUI.setVisible(true);
 		});
 		
 		
-		Cancel_btn.addActionListener(e -> {
+		cancelBtn.addActionListener(e -> {
 			try {
 				//Process p = Runtime.getRuntime().exec("shutdown -s");
 			} catch (Exception e1) {
