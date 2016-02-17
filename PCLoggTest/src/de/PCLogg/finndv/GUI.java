@@ -17,7 +17,6 @@ public class GUI extends JFrame {
 	private Connector connector;
 	
 	public GUI() {		
-		DatabaseGUI dbGUI = new DatabaseGUI();
 		connector = new Connector();
 		try {
 			connector.establishConnection();
@@ -59,7 +58,6 @@ public class GUI extends JFrame {
 			String pin = new String(passwordFld.getPassword());
 			connector.check(pin);
 			this.setVisible(false);
-			dbGUI.setVisible(true);
 		});		
 		
 		cancelBtn.addActionListener(e -> {
