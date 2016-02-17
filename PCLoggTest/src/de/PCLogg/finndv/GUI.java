@@ -1,5 +1,9 @@
 package de.PCLogg.finndv;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -7,19 +11,19 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 public class GUI extends JFrame {
-	private static final long serialVersionUID = -7071104934829402334L;
-	SystemInformation sysinfo = new SystemInformation();
+	private static final long serialVersionUID = -7071104934829402334L;	
+	public JButton okBtn;
+	public JButton cancelBtn;
+	private Connector connector;
 	
-	public JButton Ok_btn;
-	public JButton Cancel_btn;
-	private connector connection;
-	
-	private String pin = "";
-	
-	public GUI() {
-		
+	public GUI() {		
 		DatabaseGUI dbGUI = new DatabaseGUI();
-		connection = new connector();
+		connector = new Connector();
+		try {
+			connector.establishConnection();
+		} catch (ClassNotFoundException | SQLException e2) {
+			e2.printStackTrace();
+		}
 
 		//Größe und Titel vom Frame wird festgelegt;
 		this.setTitle("PCLog by Finn v1.2");
@@ -52,13 +56,11 @@ public class GUI extends JFrame {
 		
 		//ActionListener	
 		okBtn.addActionListener(e -> {
-			char[] kennung = passwordFld.getPassword();
-			pin = (new String(kennung));
-			connection.check(pin);
+			String pin = new String(passwordFld.getPassword());
+			connector.check(pin);
 			this.setVisible(false);
 			dbGUI.setVisible(true);
-		});
-		
+		});		
 		
 		cancelBtn.addActionListener(e -> {
 			try {
@@ -66,14 +68,36 @@ public class GUI extends JFrame {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-		});
+		});		
 		
+		addWindowListener(new WindowListener() {			
+			@Override
+			public void windowOpened(WindowEvent e) {}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				connector.closeConnection();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {}
+		});
 	}
 	
 	public static void main(String[]args) {
 		GUI gui = new GUI();
-		gui.setVisible(true);
-		
+		gui.setVisible(true);		
 	}
-
 }
