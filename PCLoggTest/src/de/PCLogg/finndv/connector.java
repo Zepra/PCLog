@@ -22,48 +22,30 @@ public class connector {
 		try {
 			DBConnection = DriverManager.getConnection(url, "root", "qwertz00");
 			System.out.println("Database Connected!");
-
 		} catch (SQLException se) {
 			System.out.println("No database " + se);
 		}
 		return DBConnection;
 	}
 	
-	@SuppressWarnings("resource")
 	public void check(String passwd) {
 		String selectPassQuery =  "SELECT * FROM Data WHERE Passcode=?";
 		PreparedStatement ps;
 		ResultSet rs = null;
 		Connection connect = null;
 		try {
-			String addNewLogQuery = "INSERT INTO `Logs` (`Zeit`,`Status`,`Code`,`Host`,`IP`)VALUES(?,?,?,?,?)";
 			connect = connect();
 			ps = connect.prepareStatement(selectPassQuery);
 			ps.setString(1, sysinfo.getCode(passwd));
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				ps = connect.prepareStatement(addNewLogQuery);
-				System.out.println("Success!");
-				ps.setString(1, sysinfo.getTime());
-				ps.setString(2, "OK");
-				ps.setString(3, sysinfo.getCode(passwd));
-				ps.setString(4, sysinfo.getHost());
-				ps.setString(5, sysinfo.getIP());
-				ps.executeUpdate();
+				update("OK", passwd);
 			}else {
-				ps = connect.prepareStatement(addNewLogQuery);
-				System.out.println("Fail!");
-				ps.setString(1, sysinfo.getTime());
-				ps.setString(2, "FAIL");
-				ps.setString(3, sysinfo.getCode(passwd));
-				ps.setString(4, sysinfo.getHost());
-				ps.setString(5, sysinfo.getIP());
-				ps.executeUpdate();
+				update("FAIL", passwd);
 			}
 		}catch(Exception ex) {
 			System.out.println("Error");
 			ex.printStackTrace();
-			
 		}finally{
 			if(connect != null) {
 				try {
@@ -77,6 +59,25 @@ public class connector {
 				}
 			}
 		}
-		
+	}
+	
+	public void update(String status, String passwd) {
+		String addNewLogQuery = "INSERT INTO `Logs` (`Zeit`,`Status`,`Code`,`Host`,`IP`)VALUES(?,?,?,?,?)";
+		PreparedStatement ps;
+		Connection connect = null;
+		try {
+			connect = connect();
+			ps = connect.prepareStatement(addNewLogQuery);
+			System.out.println("Fail!");
+			ps.setString(1, sysinfo.getTime());
+			ps.setString(2, status);
+			ps.setString(3, sysinfo.getCode(passwd));
+			ps.setString(4, sysinfo.getHost());
+			ps.setString(5, sysinfo.getIP());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
